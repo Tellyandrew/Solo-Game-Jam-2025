@@ -1,7 +1,10 @@
+randomise();
+
 application_surface_draw_enable(false);
 surface_resize(application_surface, 320, 192);
 
 global.currentFrame = -1;
+global.upgradeFrame = -1;
 
 global.PALETTE_UNIFORM = shader_get_uniform(a_palettise, "palette_LUT");
 enum PALETTE_INDEX{
@@ -23,11 +26,18 @@ palette_set_colour(PALETTE_INDEX.WHITE, #FFFFFF);
 palette_set_colour(PALETTE_INDEX.BLUE, #000013);
 palette_set_colour(PALETTE_INDEX.CYAN, #00FFFF);
 palette_set_colour(PALETTE_INDEX.BLACK, #0F001F);
+palette_set_colour(PALETTE_INDEX.RED, #FF0000);
+
+palette_set_colour(PALETTE_INDEX.GREEN, #00FF00);
+palette_set_colour(PALETTE_INDEX.YELLOW, #FF0000);
+palette_set_colour(PALETTE_INDEX.PURPLE, #FF00FF);
 
 global.holdingLeft = pressing_left();
 global.holdingRight = pressing_right();
 global.pressedLeft = false;
 global.pressedRight = false;
+global.releasedLeft = false;
+global.releasedRight = false;
 instance_create_depth(53, 192 - 14, 0, o_player);
 
 global.playerBulletParticleSystem = part_system_create();
@@ -53,9 +63,25 @@ global.gemGrid[0][0].gem = global.GEM_GUN_LEFT;
 global.gemGrid[4][4].gem = global.GEM_GUN_MIDDLE;
 global.gemGrid[8][8].gem = global.GEM_GUN_RIGHT;
 
-global.gemsExplored = new GemSearchNode(gem_hash(4, 4));
+global.gemsExplored = [gem_hash(4, 4)];
 global.gunCharge = 0;
 
-global.gemAddGem = global.GEM_EMPTY;
-global.gemAddLocationX = 4;
-global.gemAddLocationY = 4;
+gemAddGem = global.GEM_EMPTY;
+gemAddSlot = undefined;
+gemAddOrientation = undefined;
+gemAddTick = 0;
+
+gemSlotsEmpty = [
+            Vec2(1, 0), Vec2(2, 0), Vec2(3, 0), Vec2(4, 0),
+Vec2(0, 1), Vec2(1, 1), Vec2(2, 1), Vec2(3, 1), Vec2(4, 1), 
+Vec2(0, 2), Vec2(1, 2), Vec2(2, 2), Vec2(3, 2), Vec2(4, 2), 
+Vec2(0, 3), Vec2(1, 3), Vec2(2, 3), Vec2(3, 3), Vec2(4, 3), 
+Vec2(0, 4), Vec2(1, 4), Vec2(2, 4), Vec2(3, 4),              Vec2(5, 4), Vec2(6, 4), Vec2(7, 4), Vec2(8, 4),
+                                                Vec2(4, 5),  Vec2(5, 5), Vec2(6, 5), Vec2(7, 5), Vec2(8, 5),
+                                                Vec2(4, 6),  Vec2(5, 6), Vec2(6, 6), Vec2(7, 6), Vec2(8, 6),
+                                                Vec2(4, 7),  Vec2(5, 7), Vec2(6, 7), Vec2(7, 7), Vec2(8, 7),
+                                                Vec2(4, 8),  Vec2(5, 8), Vec2(6, 8), Vec2(7, 8)
+];
+
+gemAddSlot = Vec2_copy(gemSlotsEmpty[irandom(array_length(gemSlotsEmpty) - 1)]);
+gemAddOrientation = brandom() ? Vec2(1, 0) : Vec2(0, -1);

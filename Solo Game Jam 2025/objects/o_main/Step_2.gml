@@ -1,15 +1,9 @@
-if global.upgrading{
-	
-	
-	exit;
+if not global.upgrading{
+	global.gunCharge++;
+	global.gunCharge = min(global.gunCharge, 19);
+	part_system_update(global.playerBulletParticleSystem);
 }
 
-global.gunCharge++;
-global.gunCharge = min(global.gunCharge, 19);
-part_system_update(global.playerBulletParticleSystem);
-
-var _hash = global.gemsExplored.hash;
-var i = gem_unhash_i(_hash);
-var j = gem_unhash_j(_hash);
-
-global.gemGrid[i][j].charge = global.gunCharge;
+for (var i = 0, n = array_length(global.gemsExplored); i < n; i++){
+	global.gemGrid[gem_unhash_i(global.gemsExplored[i])][gem_unhash_j(global.gemsExplored[i])].charge = global.gunCharge;
+}

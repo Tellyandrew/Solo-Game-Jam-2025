@@ -1,1 +1,1 @@
-draw_clear_alpha(c_black, 1);
+draw_clear_alpha(#000000, 1);
