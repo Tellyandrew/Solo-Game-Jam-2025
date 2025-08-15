@@ -5,7 +5,7 @@ if global.upgrading{
 var _speed = rushTick > 0 ? 0b1 : 0b111;
 
 if global.currentFrame & _speed == 0{
-	y++;
+	++y;
 	--rushTick;
 	if y >= 200{
 		instance_destroy();

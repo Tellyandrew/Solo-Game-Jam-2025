@@ -19,6 +19,7 @@
   "height":64,
   "HTile":false,
   "layers":[
+    {"$GMImageLayer":"","%Name":"dc0900b4-3c23-44db-8595-258c148ba366","blendMode":0,"displayName":"Layer 1","isLocked":false,"name":"dc0900b4-3c23-44db-8595-258c148ba366","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
     {"$GMImageLayer":"","%Name":"6718ef3a-2d07-4caf-b6c2-a82e9f70aa64","blendMode":0,"displayName":"default","isLocked":false,"name":"6718ef3a-2d07-4caf-b6c2-a82e9f70aa64","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"s_paletteScratchpad",

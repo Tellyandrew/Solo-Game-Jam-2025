@@ -78,6 +78,8 @@ if canUpgrade{
 	var _instance = instance_position(x, y, o_upgrade);
 	if _instance != noone{
 		if _instance.y >= 0 and _instance.tick < tick{
+			audio_play_sound(u_upgrade, 800, false);
+			
 			global.upgrading = true;
 			global.gunCharge = 0;
 		
@@ -105,10 +107,14 @@ if canUpgrade{
 
 while pierces >= 0{
 	var _instance = instance_position(x, y, o_enemy);
-	if _instance == noone{
+	if _instance == noone or _instance.invincible{
 		break;
 	}
+	if not audio_is_playing(u_explosion){
+		audio_play_sound(u_explosion, 0, false);
+	}
 	global.score += _instance.value;
+	global.fakeScore += _instance.value;
 	instance_destroy(_instance);
 	--pierces;
 }

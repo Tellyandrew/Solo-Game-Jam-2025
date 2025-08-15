@@ -4,3 +4,5 @@ value = 100;
 
 rushTick = 10;
 rushSpeed = 0b1;
+
+invincible = false;

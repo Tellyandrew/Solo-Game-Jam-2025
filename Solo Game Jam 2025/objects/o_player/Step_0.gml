@@ -15,6 +15,8 @@ if rightThruster and leftThruster{
 		thrustForwardBuffer = infinity;
 	}
 	if y == TOP_THRESHOLD{
+		audio_play_sound(u_shoot, 700, false);
+		
 		#macro TOP_VELOCITY 3
 		yVelocity = TOP_VELOCITY;
 		

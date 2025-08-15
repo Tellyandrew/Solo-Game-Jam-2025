@@ -12,6 +12,8 @@ void main(){
 		gl_FragColor = vec4(palette_LUT[4], 1.0);
 	}else if (index3 == ivec3(0, 1, 1)){
 		gl_FragColor = vec4(palette_LUT[6], 1.0);
+	}else if (index3 == ivec3(1, 0, 1)){
+		gl_FragColor = vec4(palette_LUT[5], 1.0);
 	}else{
 		gl_FragColor = vec4(palette_LUT[7], 1.0);
 	}

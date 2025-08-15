@@ -1,0 +1,2 @@
+part_system_destroy(global.playerBulletParticleSystem);
+part_system_destroy(global.starParticleSystem);

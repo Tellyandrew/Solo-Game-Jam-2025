@@ -5,13 +5,51 @@ if keyboard_check_pressed(vk_anykey) or mouse_check_button_pressed(mb_any){
 if global.atStart{
 	exit;
 }
-if global.attemptingIntroMusic{
-	if audio_sound_is_playable(u_songIntro){
-		audio_play_sound(u_songIntro, 1000, false);
-		global.attemptingIntroMusic = false;
+++global.intro;
+if global.intro <= 200{
+	palette_set_colour(PALETTE_INDEX.PURPLE, merge_colour(#0F001F, #8000FF, global.intro/200));
+}else if global.intro >= 400 and global.intro <= 600{
+	palette_set_colour(PALETTE_INDEX.CYAN, merge_colour(#FFFFFF, #FFFF00, (global.intro - 400)/200));
+}else if audio_is_playing(u_songLoop){
+	var _frame = audio_sound_get_track_position(music)*60;
+	if _frame < 800{
+		_frame -= 0;
+		if _frame <= 200{
+			palette_set_colour(PALETTE_INDEX.CYAN, merge_colour(#FFFFFF, #00FFFF, _frame/200));
+		}
+	}else if _frame < 1600{
+		_frame -= 800;
+		if _frame <= 200{
+			palette_set_colour(PALETTE_INDEX.CYAN, merge_colour(#FFFFFF, #FFFF00, _frame/200));
+		}
+	}else if _frame < 2400{
+		_frame -= 1600;
+		if _frame <= 200{
+			palette_set_colour(PALETTE_INDEX.CYAN, merge_colour(#FFFFFF, #FF00FF, _frame/200));
+		}
+	}else if _frame < 3200{
+		_frame -= 2400;
+		if _frame <= 200{
+			palette_set_colour(PALETTE_INDEX.CYAN, merge_colour(#FFFFFF, #FFFF00, _frame/200));
+		}
+	}else{
+		_frame -= 3200;
+		if _frame <= 200{
+			palette_set_colour(PALETTE_INDEX.CYAN, merge_colour(#FFFFFF, #FF00FF, _frame/200));
+		}
 	}
 }
-++global.intro;
+
+if global.attemptingIntroMusic{
+	if audio_sound_is_playable(u_songIntro){
+		audio_play_sound(u_songIntro, 1000, false,, global.intro/60);
+		global.attemptingIntroMusic = false;
+	}
+}else{
+	if not audio_is_playing(u_songIntro) and not audio_is_playing(u_songLoop) and global.intro >= 790{
+		music = audio_play_sound(u_songLoop, 1000, true);
+	}
+}
 
 if not global.upgrading{
 	if global.score >= nextReward{
@@ -125,9 +163,15 @@ if not global.upgrading{
 	++global.currentFrame;
 	
 	if array_length(spawnQueue) == 0{
-		if instance_number(o_enemy) <= global.score >> 8{ //@TODO
+		if instance_number(o_enemy) <= global.fakeScore >> 9{
 			repeat(spawnDifficulty){
 				array_push(spawnQueue, o_enemyBasic);
+			}
+			repeat(floor(spawnDifficulty/5)){
+				array_push(spawnQueue, o_enemyShooty);
+			}
+			repeat(floor(spawnDifficulty/10)){
+				array_push(spawnQueue, o_enemyInvincible);
 			}
 			array_shuffle_ext(spawnQueue);
 			spawnLocation = irandom_range(0, 95);
@@ -135,7 +179,7 @@ if not global.upgrading{
 		}
 	}
 	if array_length(spawnQueue) > 0 and global.intro >= 400{
-		if global.currentFrame & 0b1111111 == 16{
+		if global.currentFrame & 0b1111111 == 16 or (global.currentFrame & 0b111111 == 16 and array_length(spawnQueue) > 32) or (global.currentFrame & 0b11111 == 16 and array_length(spawnQueue) > 64) or array_length(spawnQueue) > 96{
 			for (var i = 0, n = min(8, array_length(spawnQueue)); i < n; i++){
 				instance_create_depth(6 + ((spawnLocation + 12*i) % 96), -5, DEPTH.ENEMY, array_pop(spawnQueue));
 			}

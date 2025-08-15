@@ -10,8 +10,8 @@ global.attemptingIntroMusic = true;
 global.currentFrame = -1;
 global.upgradeFrame = -1;
 global.score = 0;
+global.fakeScore = 0;
 global.lives = 3;
-spawnThreshold = 1;
 spawnDifficulty = 1;
 spawnQueue = [];
 spawnLocation = undefined;
@@ -19,12 +19,14 @@ nextReward = 250;
 nextRewardIncrement = 250;
 nextRewardModulus = 0;
 rewardQueue = 0;
+music = undefined;
 
 global.lockoutLeft = false;
 global.lockoutRight = false;
 
 enum DEPTH{
 	ENEMY,
+	ENEMY_FAST,
 	ENEMY_PROJECTILE,
 	PLAYER,
 	PLAYER_PROJECTILE,
@@ -55,10 +57,10 @@ palette_set_colour(PALETTE_INDEX.BLUE, #000013);
 palette_set_colour(PALETTE_INDEX.CYAN, #00FFFF);
 palette_set_colour(PALETTE_INDEX.BLACK, #0F001F);
 palette_set_colour(PALETTE_INDEX.RED, #FF0000);
+palette_set_colour(PALETTE_INDEX.PURPLE, #0F001F);
 
 palette_set_colour(PALETTE_INDEX.GREEN, #00FF00);
 palette_set_colour(PALETTE_INDEX.YELLOW, #FF0000);
-palette_set_colour(PALETTE_INDEX.PURPLE, #FF00FF);
 
 global.holdingLeft = pressing_left();
 global.holdingRight = pressing_right();
@@ -72,6 +74,11 @@ global.playerBulletParticleSystem = part_system_create();
 part_system_depth(global.playerBulletParticleSystem, DEPTH.PLAYER_PROJECTILE);
 part_system_position(global.playerBulletParticleSystem, 106, 0);
 part_system_automatic_update(global.playerBulletParticleSystem, false);
+
+global.starParticleSystem = part_system_create();
+part_system_depth(global.starParticleSystem, DEPTH.PARTICLE);
+part_system_position(global.starParticleSystem, 106, 0);
+part_system_automatic_update(global.starParticleSystem, false);
 
 #macro MINI_FONT_MAP " 1234567890$ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz=-+!.,☺☻/|[]"
 global.miniFont = font_add_sprite_ext(s_font, MINI_FONT_MAP, true, 1);
