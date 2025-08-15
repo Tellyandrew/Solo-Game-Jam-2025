@@ -3,8 +3,36 @@ randomise();
 application_surface_draw_enable(false);
 surface_resize(application_surface, 320, 192);
 
+global.atStart = true;
+global.intro = -1;
+global.attemptingIntroMusic = true;
+
 global.currentFrame = -1;
 global.upgradeFrame = -1;
+global.score = 0;
+global.lives = 3;
+spawnThreshold = 1;
+spawnDifficulty = 1;
+spawnQueue = [];
+spawnLocation = undefined;
+nextReward = 250;
+nextRewardIncrement = 250;
+nextRewardModulus = 0;
+rewardQueue = 0;
+
+global.lockoutLeft = false;
+global.lockoutRight = false;
+
+enum DEPTH{
+	ENEMY,
+	ENEMY_PROJECTILE,
+	PLAYER,
+	PLAYER_PROJECTILE,
+	UPGRADE,
+	UPGRADE_BACKGROUND,
+	PARTICLE_IMPORTANT,
+	PARTICLE,
+}
 
 global.PALETTE_UNIFORM = shader_get_uniform(a_palettise, "palette_LUT");
 enum PALETTE_INDEX{
@@ -38,10 +66,10 @@ global.pressedLeft = false;
 global.pressedRight = false;
 global.releasedLeft = false;
 global.releasedRight = false;
-instance_create_depth(53, 192 - 14, 0, o_player);
+instance_create_depth(53, 192, DEPTH.PLAYER, o_player);
 
 global.playerBulletParticleSystem = part_system_create();
-part_system_depth(global.playerBulletParticleSystem, 100);
+part_system_depth(global.playerBulletParticleSystem, DEPTH.PLAYER_PROJECTILE);
 part_system_position(global.playerBulletParticleSystem, 106, 0);
 part_system_automatic_update(global.playerBulletParticleSystem, false);
 
@@ -66,10 +94,10 @@ global.gemGrid[8][8].gem = global.GEM_GUN_RIGHT;
 global.gemsExplored = [gem_hash(4, 4)];
 global.gunCharge = 0;
 
-gemAddGem = global.GEM_EMPTY;
+global.gemAddGem = global.GEM_EMPTY;
 gemAddSlot = undefined;
 gemAddOrientation = undefined;
-gemAddTick = 0;
+global.gemAddTick = 0;
 
 gemSlotsEmpty = [
             Vec2(1, 0), Vec2(2, 0), Vec2(3, 0), Vec2(4, 0),
