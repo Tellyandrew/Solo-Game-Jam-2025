@@ -81,6 +81,8 @@
     {"id":{"name":"s_star","path":"sprites/s_star/s_star.yy",},},
     {"id":{"name":"s_thresholdLine","path":"sprites/s_thresholdLine/s_thresholdLine.yy",},},
     {"id":{"name":"s_upgradeLine","path":"sprites/s_upgradeLine/s_upgradeLine.yy",},},
+    {"id":{"name":"Sprite35_1","path":"sprites/Sprite35_1/Sprite35_1.yy",},},
+    {"id":{"name":"Sprite35","path":"sprites/Sprite35/Sprite35.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
